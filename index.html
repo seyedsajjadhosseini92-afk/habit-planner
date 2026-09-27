@@ -1342,9 +1342,11 @@ document.getElementById('bgUploadInput').addEventListener('change',function(e){
 });
 
 function loadStore(){
+  try{ var raw=localStorage.getItem(STORE_KEY); if(raw) return JSON.parse(raw); }catch(e){}
+  // Migrate data from the old v1 web build so nobody loses their habits
   try{
-    var raw=localStorage.getItem(STORE_KEY);
-    if(raw) return JSON.parse(raw);
+    var oldRaw=localStorage.getItem("habit-planner-v1");
+    if(oldRaw){ var oldS=JSON.parse(oldRaw); if(oldS && oldS.months){ return oldS; } }
   }catch(e){}
   return {months:{}, currentJY:null, currentJM:null};
 }
