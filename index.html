@@ -693,8 +693,8 @@ html.compact .fo-day{min-height:40px;border-radius:10px;font-size:10.5px;}
 }
 .fo-all:hover{background:var(--accent);color:#fff;}
 
-/* while focus mode is on, everything else is hidden but kept in DOM */
-.fo-hide{display:none!important;}
+/* while focus mode is on, hide body's children EXCEPT the overlay itself */
+body.fo-hide > *:not(#focusOverlay){display:none!important;}
 
 @media (max-width:560px){
   .fo-body{padding:10px 8px 14px;}
