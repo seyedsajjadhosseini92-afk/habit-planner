@@ -746,7 +746,7 @@ button,.habitcheck,.day-cell{-webkit-touch-callout:none;}
 
   <div class="card" id="famousCard">
     <h2 style="margin-bottom:2px;">پیشنهاد افراد مشهور</h2>
-    <p class="sub" style="margin-bottom:16px;">عادت‌هایی که چند چهره‌ی شناخته‌شده، طبق مصاحبه‌ها و گزارش‌های منتشرشده، بهشون پایبندن — نه ادعای تأییدشده‌ی رسمی خودشون.</p>
+    <p class="sub" style="margin-bottom:16px;">عادت‌هایی که ۲۰ چهره‌ی شناخته‌شده، طبق مصاحبه‌ها و گزارش‌های منتشرشده، بهشون پایبندن — نه ادعای تأییدشده‌ی رسمی خودشون.</p>
     <div id="famousGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px;"><div class="tpl-card"><div class="tpl-ico">⚽</div><h3>کریستیانو رونالدو</h3><p>طبق مصاحبه‌هاش: اولین کار بعد بیدار شدن، آب‌رسانی بدنه؛ نه قهوه، نه چیز دیگه.</p><div class="tpl-chips"><span class="tpl-chip">💧 آب خوردن فوری بعد بیداری</span><span class="tpl-chip">😴 چرت/استراحت روزانه برای ریکاوری</span></div><button class="tpl-apply-btn" data-tpl="ronaldo" data-grid="famousGrid">افزودن این الگو</button></div><div class="tpl-card"><div class="tpl-ico">💻</div><h3>بیل گیتس</h3><p>هر روز صبح ورزش می‌کنه (همراه با یادگیری چیز جدید)، و شب قبل خواب حداقل یک ساعت مطالعه می‌کنه.</p><div class="tpl-chips"><span class="tpl-chip">📖 ۱ ساعت مطالعه قبل خواب</span><span class="tpl-chip">🏃 ورزش صبحگاهی + یادگیری هم‌زمان</span></div><button class="tpl-apply-btn" data-tpl="gates" data-grid="famousGrid">افزودن این الگو</button></div><div class="tpl-card"><div class="tpl-ico">🍏</div><h3>تیم کوک</h3><p>خیلی زود بیدار می‌شه تا صبحش رو خودش کنترل کنه، بعد یک ساعت تمرین بدنی.</p><div class="tpl-chips"><span class="tpl-chip">⏰ بیدار شدن خیلی زود</span><span class="tpl-chip">💪 ۱ ساعت تمرین بدنی صبحگاهی</span></div><button class="tpl-apply-btn" data-tpl="cook" data-grid="famousGrid">افزودن این الگو</button></div><div class="tpl-card"><div class="tpl-ico">🏃‍♀️</div><h3>میشل اوباما</h3><p>ورزش صبحگاهی رو حتی تو سفر هم حفظ می‌کنه (با یه طناب ساده).</p><div class="tpl-chips"><span class="tpl-chip">🤸 ورزش صبحگاهی (حتی موقع سفر)</span></div><button class="tpl-apply-btn" data-tpl="obama" data-grid="famousGrid">افزودن این الگو</button></div></div>
   </div>
 
@@ -1454,37 +1454,133 @@ var HABIT_TEMPLATES=[
 ];
 
 var FAMOUS_PEOPLE=[
-  {
-    id:'ronaldo', ico:'⚽', title:'کریستیانو رونالدو',
+  // ---------- 10 men ----------
+  { id:'ronaldo', ico:'⚽', title:'کریستیانو رونالدو',
     desc:'طبق مصاحبه‌هاش: اولین کار بعد بیدار شدن، آب‌رسانی بدنه؛ نه قهوه، نه چیز دیگه.',
     habits:[
       {emoji:'💧',name:'آب خوردن فوری بعد بیداری',freq:1},
       {emoji:'😴',name:'چرت/استراحت روزانه برای ریکاوری',freq:0.85}
-    ]
-  },
-  {
-    id:'gates', ico:'💻', title:'بیل گیتس',
+    ]},
+  { id:'gates', ico:'💻', title:'بیل گیتس',
     desc:'هر روز صبح ورزش می‌کنه (همراه با یادگیری چیز جدید)، و شب قبل خواب حداقل یک ساعت مطالعه می‌کنه.',
     habits:[
       {emoji:'📖',name:'۱ ساعت مطالعه قبل خواب',freq:0.9},
       {emoji:'🏃',name:'ورزش صبحگاهی + یادگیری هم‌زمان',freq:0.85}
-    ]
-  },
-  {
-    id:'cook', ico:'🍏', title:'تیم کوک',
+    ]},
+  { id:'cook', ico:'🍏', title:'تیم کوک',
     desc:'خیلی زود بیدار می‌شه تا صبحش رو خودش کنترل کنه، بعد یک ساعت تمرین بدنی.',
     habits:[
       {emoji:'⏰',name:'بیدار شدن خیلی زود',freq:1},
       {emoji:'💪',name:'۱ ساعت تمرین بدنی صبحگاهی',freq:0.85}
-    ]
-  },
-  {
-    id:'obama', ico:'🏃‍♀️', title:'میشل اوباما',
+    ]},
+  { id:'jobs', ico:'📱', title:'استیو جابز',
+    desc:'به گفته‌ی مصاحبه‌ها: مدیتیشن ذن، جلسات حین قدم‌زدن، و ساده‌کردن تصمیم‌ها (همین لباس هر روز).',
+    habits:[
+      {emoji:'🧘',name:'مدیتیشن ذن روزانه',freq:0.9},
+      {emoji:'🚶',name:'جلسات حین قدم‌زدن',freq:0.8},
+      {emoji:'🎯',name:'یک هدف اصلی برای روز',freq:0.9}
+    ]},
+  { id:'arnold', ico:'🏋️', title:'آرنولد شوارتزنگر',
+    desc:'حتی در دوران فیلم و فرمانداری، تمرین صبحگاهی رو هرگز حذف نکرده.',
+    habits:[
+      {emoji:'💪',name:'تمرین صبحگاهی (هر روز)',freq:0.95},
+      {emoji:'🥚',name:'صبحانه‌ی پرپروتئین',freq:0.9},
+      {emoji:'🛌',name:'خواب کافی برای ریکاوری',freq:0.85}
+    ]},
+  { id:'barack', ico:'🏃', title:'باراک اوباما',
+    desc:'۴۵ دقیقه ورزش هر صبح، و کاهش تصمیم‌های خرد با ثابت‌کردن بخشی از روزمرگی.',
+    habits:[
+      {emoji:'🏃',name:'۴۵ دقیقه ورزش صبحگاهی',freq:0.95},
+      {emoji:'🧠',name:'اول کار مهم، بعد جزئیات',freq:0.9}
+    ]},
+  { id:'bezos', ico:'📦', title:'جف بزوس',
+    desc:'هشت ساعت خواب رو جدی می‌گیره و صبح‌ها رو بدون سرعت‌گرفتن، با وقت فکر کردن شروع می‌کنه.',
+    habits:[
+      {emoji:'🛌',name:'۸ ساعت خواب',freq:0.95},
+      {emoji:'☕',name:'صبح آرام + یک ساعت فکر کردن',freq:0.9}
+    ]},
+  { id:'dalio', ico:'🧘', title:'ری دالیو',
+    desc:'مدیتیشن ترانسندنتال رو دو بار در روز، از دهه‌ها پیش، حفظ کرده.',
+    habits:[
+      {emoji:'🧘',name:'مدیتیشن ۲۰ دقیقه (۲ بار در روز)',freq:0.95},
+      {emoji:'📝',name:'یادداشت اصول و درس‌ها',freq:0.8}
+    ]},
+  { id:'murakami', ico:'🏃', title:'هاروکی موراکامی',
+    desc:'نویسنده‌ای کهrunning روزانه و نوشتن ساعت ۴ صبح رو مثل یک تشریفات انجام می‌ده.',
+    habits:[
+      {emoji:'🏃',name:'دویدن روزانه',freq:0.95},
+      {emoji:'✍️',name:'نوشتن ساعت ۴ صبح',freq:0.9},
+      {emoji:'🛌',name:'خواب زودهنگام شبانه',freq:0.9}
+    ]},
+  { id:'branson', ico:'🏝️', title:'ریچارد برنسون',
+    desc:'ورزش صبحگاهی (تنیس یا کایت) برای شروع روز با انرژی.',
+    habits:[
+      {emoji:'🎾',name:'ورزش صبحگاهی (تنیس/کایت)',freq:0.85},
+      {emoji:'📓',name:'یادداشت ایده‌ها',freq:0.8}
+    ]},
+  // ---------- 10 women ----------
+  { id:'obama', ico:'🏃‍♀️', title:'میشل اوباما',
     desc:'ورزش صبحگاهی رو حتی تو سفر هم حفظ می‌کنه (با یه طناب ساده).',
     habits:[
       {emoji:'🤸',name:'ورزش صبحگاهی (حتی موقع سفر)',freq:0.85}
-    ]
-  }
+    ]},
+  { id:'oprah', ico:'📺', title:'اپرا وینفری',
+    desc:'روزش رو با قدردانی و مدیتیشن شروع می‌کنه و مطالعه رو بخشی از روزمرگی می‌دونه.',
+    habits:[
+      {emoji:'🙏',name:'یادداشت قدردانی صبحگاهی',freq:0.9},
+      {emoji:'🧘',name:'مدیتیشن نشسته',freq:0.8},
+      {emoji:'📖',name:'مطالعه‌ی روزانه',freq:0.85}
+    ]},
+  { id:'huffington', ico:'🛌', title:'آریانا هافینگتون',
+    desc:'بعد از یک فروپاشی از خواب‌نبودن، خواب رو اولویت اولش قرار داد؛ گوشی بیرون اتاق خواب.',
+    habits:[
+      {emoji:'🛌',name:'۷–۸ ساعت خواب',freq:0.95},
+      {emoji:'📵',name:'گوشی بیرون اتاق خواب',freq:0.9}
+    ]},
+  { id:'aniston', ico:'🧘', title:'جنیفر آنیستون',
+    desc:'صبح رو با آب ولرم و لیمو و مراقبه/یوگا شروع می‌کنه.',
+    habits:[
+      {emoji:'🍋',name:'آب ولرم و لیمو ناشتا',freq:0.9},
+      {emoji:'🧘',name:'مراقبه یا یوگای صبحگاهی',freq:0.85}
+    ]},
+  { id:'serena', ico:'🎾', title:'سرنا ویلیامز',
+    desc:'نظم تمرین، ریکاوری و تغذیه رو در کنار هم جدی می‌گیره.',
+    habits:[
+      {emoji:'🏋️',name:'تمرین فنی و بدنی',freq:0.9},
+      {emoji:'🥗',name:'تغذیه‌ی برنامه‌ریزی‌شده',freq:0.85},
+      {emoji:'😴',name:'ریکاوری و خواب کافی',freq:0.9}
+    ]},
+  { id:'beyonce', ico:'🎤', title:'بیانسه',
+    desc:'نظم در تمرین و گرم‌کردن صوتی، و تصویرسازی ذهنی قبل از هر اجرا.',
+    habits:[
+      {emoji:'🎵',name:'گرم‌کردن صوتی روزانه',freq:0.9},
+      {emoji:'🎯',name:'تصویرسازی ذهنی هدف',freq:0.85},
+      {emoji:'🏃',name:'تمرین فیزیکی صحنه',freq:0.8}
+    ]},
+  { id:'watson', ico:'📚', title:'اما واتسون',
+    desc:'مطالعه و یادگیری مداوم رو بخشی از هویتش می‌دونه؛ دفترچه همیشه همراهشه.',
+    habits:[
+      {emoji:'📚',name:'مطالعه‌ی روزانه',freq:0.85},
+      {emoji:'📓',name:'یادداشت‌برداری',freq:0.8}
+    ]},
+  { id:'rowling', ico:'✍️', title:'جی.کی. رولینگ',
+    desc:'نوشتن رو مثل یه شیفت کاری می‌بینه؛ حتی بدون الهام، می‌نشینه و می‌نویسه.',
+    habits:[
+      {emoji:'✍️',name:'نوشتن روزانه (شیفت ثابت)',freq:0.9},
+      {emoji:'☕',name:'نوشتن در یک کافه ثابت',freq:0.7}
+    ]},
+  { id:'berry', ico:'🧘', title:'هل بری',
+    desc:'یوگا و تغذیه‌ی تمیز بخش اصلی برنامه‌ی روزانه‌شه.',
+    habits:[
+      {emoji:'🧘',name:'یوگای روزانه',freq:0.85},
+      {emoji:'🥗',name:'تغذیه‌ی تمیز',freq:0.85}
+    ]},
+  { id:'sandberg', ico:'💼', title:'شریل سندبرگ',
+    desc:'روزش رو با برنامه‌ریزی دقیق شروع می‌کنه و ساعت ۵:۳۰ برای خانواده خاتمه می‌ده.',
+    habits:[
+      {emoji:'📝',name:'برنامه‌ریزی شب قبل',freq:0.9},
+      {emoji:'🕕',name:'خاتمه‌ی کار ساعت ۵:۳۰',freq:0.85}
+    ]}
 ];
 
 function renderPicksGrid(list, gridId){
