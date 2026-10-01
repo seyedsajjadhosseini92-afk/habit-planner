@@ -601,6 +601,61 @@ canvas{max-width:100% !important;}
 }
 /* prevent the double-tap / pinch "weird zoom" on buttons and cells */
 button,.habitcheck,.day-cell{-webkit-touch-callout:none;}
+
+/* =========================================================
+   iOS safe fixes — the remaining real overflow bugs
+   ========================================================= */
+/* The tab bar used min-width:max-content + flex-wrap:nowrap, so 6 tabs stretched
+   it to ~474px and dragged the whole page sideways on phones. Constrain the
+   flex container so it scrolls INTERNALLY instead of pushing the page. */
+.app-tabs{
+  max-width:100%;
+  min-width:0;
+  width:100%;
+  overflow-x:auto;
+  flex:0 1 auto;
+}
+/* the tab row must be allowed to shrink so the scrollbar can engage */
+.app-tabs .app-tab{
+  min-width:0;
+  flex:0 0 auto;
+  white-space:nowrap;
+  font-size:12px;
+  padding:10px 10px;
+}
+html.compact .app-tabs .app-tab{ font-size:11.5px; padding:9px 8px; }
+
+/* any flex row that must scroll instead of overflowing the page */
+.wrap{min-width:0;}
+#appRoot{min-width:0;}
+.app-page{min-width:0;}
+/* flex children must be allowed to shrink, otherwise a row of
+   input+button can't compress and pushes the page wider than the screen */
+.app-page{min-width:0;}
+.app-page .card{min-width:0;}
+.app-page .today-task-add,
+.app-page .study-log-row,
+.app-page .log-row{min-width:0; flex-wrap:wrap;}
+.app-page .today-task-add > *,
+.app-page .study-log-row > *,
+.app-page .log-row > *{min-width:0;}
+.app-page .today-task-add input,
+.app-page .study-log-row input,
+.app-page .study-log-row select{ flex:1 1 140px; }
+.app-page .today-task-add button,
+.app-page .study-log-row button,
+.app-page .log-row button{ flex:0 0 auto; }
+
+/* inputs without an explicit type are text inputs too — cover them so iOS
+   never auto-zooms on focus (the earlier rule missed them) */
+@media (max-width:560px){
+  input:not([type=checkbox]):not([type=radio]):not([type=color])
+       :not([type=file]):not([type=range]):not([type=submit])
+       :not([type=button]):not([type=hidden]):not([type=image]),
+  textarea,select{
+    font-size:16px !important;
+  }
+}
 </style>
 </head>
 <body>
