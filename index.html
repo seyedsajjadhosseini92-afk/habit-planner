@@ -693,6 +693,52 @@ input[type=radio]{
 .wk-table input[type=checkbox],
 .mtable input[type=checkbox]{ width:24px !important; height:24px !important; }
 </style>
+<style id="updateBannerStyle">
+#updateBanner{
+  position:fixed; left:12px; right:12px; bottom:16px; z-index:2147483000;
+  background:#20264D; color:#fff; border-radius:14px;
+  box-shadow:0 8px 28px rgba(20,20,60,.35);
+  padding:12px 14px; display:none;
+  font-family:inherit; font-size:13px; line-height:1.5;
+  border:1px solid rgba(255,255,255,.14);
+}
+#updateBanner.show{ display:block; }
+#updateBanner .ub-row{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+#updateBanner .ub-icon{
+  flex:none; width:34px; height:34px; border-radius:10px;
+  background:linear-gradient(135deg,#6C5CE7,#00C2A8);
+  display:flex; align-items:center; justify-content:center; font-size:17px;
+}
+#updateBanner .ub-text{ flex:1 1 160px; min-width:0; }
+#updateBanner .ub-title{ font-weight:700; font-size:13.5px; margin-bottom:2px; }
+#updateBanner .ub-sub{ color:#C9C6E4; font-size:12px; }
+#updateBanner .ub-sub b{ color:#fff; }
+#updateBanner .ub-actions{ display:flex; gap:8px; flex:none; }
+#updateBanner .ub-btn{
+  border:none; border-radius:10px; padding:8px 14px; cursor:pointer;
+  font-family:inherit; font-weight:700; font-size:12.5px;
+}
+#updateBanner .ub-btn.primary{ background:#00C2A8; color:#04201C; }
+#updateBanner .ub-btn.primary:hover{ background:#00D8BA; }
+#updateBanner .ub-btn.ghost{ background:rgba(255,255,255,.10); color:#fff; }
+#updateBanner .ub-btn.ghost:hover{ background:rgba(255,255,255,.18); }
+#updateBanner .ub-btn:disabled{ opacity:.55; cursor:default; }
+#updateBanner .ub-bar{
+  margin-top:10px; height:6px; border-radius:99px;
+  background:rgba(255,255,255,.16); overflow:hidden; display:none;
+}
+#updateBanner .ub-bar.show{ display:block; }
+#updateBanner .ub-bar i{
+  display:block; height:100%; width:0%; border-radius:99px;
+  background:linear-gradient(90deg,#00C2A8,#6C5CE7); transition:width .25s ease;
+}
+#updateBanner .ub-err{ color:#FFB3B3; font-size:11.5px; margin-top:6px; display:none; }
+#updateBanner .ub-err.show{ display:block; }
+@media (max-width:420px){
+  #updateBanner{ left:8px; right:8px; bottom:10px; padding:10px 12px; }
+  #updateBanner .ub-text{ flex:1 1 120px; }
+}
+</style>
 </head>
 <body>
 <div id="lockScreen" style="position: fixed; inset: 0px; background: rgb(32, 38, 77); color: rgb(255, 255, 255); display: none; flex-direction: column; align-items: center; justify-content: center; gap: 16px; z-index: 9999; font-family: Vazirmatn, sans-serif; padding: 20px; text-align: center;">
@@ -748,6 +794,107 @@ input[type=radio]{
   </div>
 
   <div id="page-main" class="app-page active">
+<style id="quoteBoxStyle">
+#quoteBox{
+  margin:0 0 16px; padding:14px 16px; border-radius:16px;
+  background:linear-gradient(135deg,#242A55 0%,#2E2A6B 55%,#1F5F63 100%);
+  color:#fff; position:relative; overflow:hidden;
+  border:1px solid rgba(255,255,255,.10);
+  box-shadow:0 8px 22px -10px rgba(32,38,77,.55);
+}
+#quoteBox::before{
+  content:"\201C"; position:absolute; left:10px; top:-16px;
+  font-size:74px; font-family:Georgia,serif; color:rgba(255,255,255,.16); line-height:1;
+}
+#quoteBox .q-inner{ position:relative; z-index:1; }
+#quoteBox .q-badge{
+  display:inline-block; font-size:10.5px; font-weight:700; letter-spacing:.4px;
+  background:rgba(0,194,168,.22); color:#7CE9D8;
+  padding:3px 10px; border-radius:99px; margin-bottom:8px;
+}
+#quoteBox .q-text{
+  font-size:14.5px; line-height:1.75; font-weight:600; margin:0 0 8px;
+  text-align:justify; text-justification:inter-word;
+}
+#quoteBox .q-who{
+  font-size:12px; font-weight:700; color:#B9B4E8;
+  display:flex; align-items:center; gap:6px;
+}
+#quoteBox .q-who::before{
+  content:""; width:16px; height:2px; border-radius:2px; background:#00C2A8; flex:none;
+}
+#quoteBox .q-refresh{
+  margin-top:10px; width:100%; border:none; border-radius:10px; padding:7px 10px;
+  background:rgba(255,255,255,.08); color:#D8D4F2; font-family:inherit;
+  font-size:11.5px; font-weight:600; cursor:pointer;
+}
+#quoteBox .q-refresh:hover{ background:rgba(255,255,255,.16); }
+html.compact #quoteBox{ padding:11px 13px; margin-bottom:12px; }
+html.compact #quoteBox .q-text{ font-size:13px; line-height:1.65; }
+@media (max-width:420px){ #quoteBox .q-text{ font-size:13.5px; } }
+</style>
+
+<div id="quoteBox" dir="rtl">
+  <div class="q-inner">
+    <span class="q-badge">جمله امروز</span>
+    <p class="q-text" id="quoteText">&nbsp;</p>
+    <div class="q-who" id="quoteWho"></div>
+    <button type="button" class="q-refresh" id="quoteRefresh">جمله دیگر</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  var QUOTES = [["رالف والدو امرسون","آنچه پشت تو و آنچه پیش روی توست در برابر آنچه در درون توست ناچیز است."],["استیو جابز","وقت‌تان محدود است، پس آن را با زندگیِ کسی دیگر تلف نکنید."],["محمد علی کلی","اگر رویاهایت تو را نمی‌ترساند، آن‌ها به اندازه کافی بزرگ نیستند."],["ماهاتما گاندی","باید خودت همان تغییری باشی که می‌خواهی در جهان ببینی."],["نلسون ماندلا","هرگز برنده نمی‌شوی، مگر اینکه دوباره بلند شوی."],["آلبرت انیشتین","تخیل برای دانش مهم‌تر است."],["هنری فورد","چه فکر کنی می‌توانی و چه فکر کنی نمی‌توانی، در هر دو حال حق با توست."],["وینستون چرچیل","موفقیت، پرفرجامی از شکست به شکست بدون از دست دادن شور و شوق است."],["کنفوسیوس","خشم را با مهربانی دفع کن. کمیاب‌ترین فضیلت، مهربانی در پاسخ به زخمت است."],["لائوتسه","سفرِ هزاران کیلومتر با یک قدم آغاز می‌شود."],["اپیکور","هیچ چیز برای کسی که حس کمبود دارد، کافی نیست."],["سقراط","آرامش درونی، بزرگ‌ترین ثروت است."],["اریک توماس","وقتی می‌خواهی موفق شوی، باید به همان اندازه که می‌خواهی نفس بکشی، آرزو کنی."],["دیوید گوش","باور، تنها چیزی است که برای موفقیت لازم است."],["ناپلئون هیل","هر محدودیتی که در ذهن داری، فقط در ذهن توست."],["ویکتور فرانکل","وقتی دیگر نمی‌توانیم وضعیتی را تغییر دهیم، از ما خواسته می‌شود خود را تغییر دهیم."],["النور روزولت","هر روز، در هر شکلی، کمی بهتر از دیروز."],["جیم ران","نظم، پل میان اهداف و دستاوردهاست."],["برایان تریسی","تمرکز، کلید موفقیت است. موفقیت، نتیجه تمرکز مداوم است."],["رابین شارما","تغییرات کوچک روزانه، با گذشت زمان به نتایج بزرگ منجر می‌شوند."],["لو هولتز","توانایی، بهانه نیست. کسی که می‌گوید نمی‌توانی، خودش کاری نکرده است."],["فیلیپ نایت","چه کسی می‌گوید نمی‌توانی؟ فقط کسانی که خودشان تلاش نکرده‌اند."],["جیمز کلیر","تو به سطح اهداف‌تان نمی‌رسی، بلکه به سطح سیستم‌هایت سقوط می‌کنی."],["کال نیوپورت","موفقیت، انجام کارهای معمولی به شکلی غیرمعمول است."],["رایان هولیدای","موانع، خود مسیرند. آنچه در راه است، خود راه است."],["مایکل جردن","موانع و سختی‌ها، فرصت‌هایی‌اند که به ما امکان رشد می‌دهند."],["توماس ادیسون","نابغه، یک درصد الهام و نود و نه درصد عرق ریزی است."],["هنری دیوید ثورو","با اشتیاق زندگی کن. زندگی‌ای که تقلید از دیگران باشد، هدر رفته است."],["مارکوس آئورلیوس","تو بر احساساتت مسلطی؛ درک همین موضوع، کل آرامش درونی توست."],["سنکا","هر روز جدید، فرصتی برای شروع دوباره است."],["لئو تولستوی","تنها راه انجام کارهای بزرگ، انجام کارهای کوچک با دقت است."],["گاریندا داس","عشق، تنها نیرویی است که هر دشمنی را می‌تواند به دوست تبدیل کند."],["دالایی لاما","هدف زندگی، شادی است. موفقیت نهایی، آرامش درونی است."],["تونی رابینز","کیفیت زندگی‌ات، برابر است با کیفیت ارتباطات و عادت‌هایت."],["اوپرا وینفری","هرگز فراموش نکن که قدرت درونی‌ات، حیات را دگرگون می‌کند."]];
+  var KEY='quote-index';
+  var txt=document.getElementById('quoteText');
+  var who=document.getElementById('quoteWho');
+  if(!txt) return;
+
+  // Jalali (Shamsi) day index so the quote changes at local midnight,
+  // not every reload.
+  function jalaliDayIndex(){
+    try{
+      if(window.jalaliToDate && window.gregorianToJalali){
+        var d=new Date();
+        var j=gregorianToJalali(d.getFullYear(),d.getMonth()+1,d.getDate());
+        return j[0]*1000 + Math.round(j[1]*30.44 + j[2]);
+      }
+    }catch(e){}
+    // Fallback: gregorian day-of-year is fine (still once per day)
+    var d=new Date();
+    var start=new Date(d.getFullYear(),0,0);
+    return d.getFullYear()*1000 + Math.floor((d-start)/86400000);
+  }
+
+  function pick(fresh){
+    var idx;
+    if(fresh){
+      // "another quote" button: next quote in sequence, stored locally
+      try{ idx=(parseInt(localStorage.getItem(KEY)||'0',10)+1)%QUOTES.length; }catch(e){ idx=1; }
+    }else{
+      // daily quote: seeded by date, stable for the whole day
+      var seed=jalaliDayIndex();
+      var offset=0;
+      try{ offset=parseInt(localStorage.getItem(KEY)||'0',10); if(isNaN(offset)) offset=0; }catch(e){}
+      idx=(seed+offset)%QUOTES.length;
+    }
+    try{ localStorage.setItem(KEY, String(idx)); }catch(e){}
+    show(idx);
+  }
+
+  function show(idx){
+    var q=QUOTES[idx%QUOTES.length];
+    if(!q) return;
+    txt.textContent=q[1];
+    who.textContent=q[0];
+  }
+
+  var btn=document.getElementById('quoteRefresh');
+  if(btn) btn.addEventListener('click', function(){ pick(true); });
+  pick(false);
+})();
+</script>
   <div class="card" style="margin-bottom:16px;">
     <h2>عادات برتر</h2>
     <p class="sub">بر اساس تعداد دفعات انجام‌شده در این ماه</p>
@@ -3307,4 +3454,98 @@ renderTemplates();
 if(window.__showHolidayPopup) showHolidayAnnouncement();
 </script>
 
-</body></html>
+
+<div id="updateBanner" dir="rtl">
+  <div class="ub-row">
+    <div class="ub-icon">&#8595;</div>
+    <div class="ub-text">
+      <div class="ub-title" id="ubTitle">&#1576;&#1585;&#1608;&#1586;&#1585;&#1587;&#1575;&#1606;&#1740; &#1580;&#1583;&#1740;&#1583;</div>
+      <div class="ub-sub" id="ubSub"></div>
+    </div>
+    <div class="ub-actions">
+      <button class="ub-btn primary" id="ubPrimary">&#1576;&#1585;&#1608;&#1586;&#1585;&#1587;&#1575;&#1606;&#1740;</button>
+      <button class="ub-btn ghost" id="ubLater">&#1576;&#1593;&#1583;&#1575;&#1611;</button>
+    </div>
+  </div>
+  <div class="ub-bar" id="ubBar"><i id="ubFill"></i></div>
+  <div class="ub-err" id="ubErr"></div>
+</div>
+<script>
+(function(){
+  // Update UI only exists in the desktop build (window.plannerUpdate is set by preload.js).
+  if (!window.plannerUpdate) return;
+  var banner=document.getElementById('updateBanner');
+  if(!banner) return;
+  var sub=document.getElementById('ubSub'), title=document.getElementById('ubTitle');
+  var primary=document.getElementById('ubPrimary'), later=document.getElementById('ubLater');
+  var bar=document.getElementById('ubBar'), fill=document.getElementById('ubFill');
+  var errEl=document.getElementById('ubErr');
+  var faDigits=['۰','۱','۲','۳','۴','۵','۶','۷','۸','۹'];
+  function faNum(n){ return String(n).replace(/[0-9]/g,function(d){return faDigits[d];}); }
+  function show(){ banner.classList.add('show'); }
+  function hide(){ banner.classList.remove('show'); }
+
+  primary.addEventListener('click',function(){
+    // The download already started automatically; this button now means
+    // "install now" once ready, or "retry" after an error.
+    if(primary.dataset.mode==='install'){
+      primary.disabled=true;
+      later.disabled=true;
+      primary.textContent='در حال نصب...';
+      window.plannerUpdate.restartToInstall();
+      return;
+    }
+    if(primary.dataset.mode==='retry'){
+      primary.disabled=true;
+      errEl.classList.remove('show');
+      bar.classList.add('show');
+      primary.textContent='در حال دانلود...';
+      window.plannerUpdate.checkNow();
+      return;
+    }
+  });
+  later.addEventListener('click',function(){
+    hide();
+    try{ localStorage.setItem('update-later-version', String(primary.dataset.ver||'')); }catch(e){}
+  });
+
+  window.plannerUpdate.onStatus(function(payload){
+    if(!payload) return;
+    var status=payload.status, data=payload.data||{};
+    if(status==='available'){
+      // Do not nag again for a version the user already dismissed.
+      var dismissed='';
+      try{ dismissed=localStorage.getItem('update-later-version')||''; }catch(e){}
+      if(dismissed===String(data.version||'')) return;
+      title.textContent='بروزرسانی جدید در دسترس است';
+      sub.innerHTML='نسخه '+faNum(data.version)+' آماده نصب است. دانلود شروع شد...';
+      primary.dataset.mode='waiting'; primary.textContent='در حال دانلود...'; primary.disabled=true;
+      bar.classList.add('show'); fill.style.width='2%';
+      show();
+    } else if(status==='progress'){
+      bar.classList.add('show');
+      fill.style.width=(data.percent||0)+'%';
+      sub.innerHTML='در حال دانلود نسخه '+faNum(data.version||'')+' &mdash; '+faNum(data.percent||0)+'٪';
+      primary.disabled=true; primary.textContent='در حال دانلود...'; primary.dataset.mode='waiting';
+    } else if(status==='downloaded'){
+      fill.style.width='100%';
+      title.textContent='بروزرسانی آماده نصب است';
+      sub.innerHTML='نسخه '+faNum(data.version||'')+' دانلود شد. نصب و راه‌اندازی مجدد انجام شود؟';
+      primary.disabled=false; primary.textContent='نصب و راه‌اندازی'; primary.dataset.mode='install';
+      primary.dataset.ver=data.version||'';
+      later.textContent='بعداً';
+      show();
+    } else if(status==='not-available'){
+      // silently nothing
+    } else if(status==='error'){
+      bar.classList.remove('show');
+      errEl.textContent='دانلود ناموفق بود. می‌توانید دوباره تلاش کنید یا از سایت دریافت کنید.';
+      errEl.classList.add('show');
+      primary.disabled=false; primary.textContent='تلاش مجدد'; primary.dataset.mode='retry';
+      later.textContent='دریافت از سایت';
+      later.onclick=function(){ window.plannerUpdate.openDownloadPage(); };
+      show();
+    }
+  });
+})();
+</script></body></html>
