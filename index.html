@@ -833,6 +833,47 @@ html.compact #quoteBox{ padding:11px 13px; margin-bottom:12px; }
 html.compact #quoteBox .q-text{ font-size:13px; line-height:1.65; }
 @media (max-width:420px){ #quoteBox .q-text{ font-size:13.5px; } }
 </style>
+<style id="sticky-ios-fix">
+/* ---------- iOS sticky-column repaint fix ---------- */
+/* The habit table scrolls horizontally inside .table-scroll while its first
+   columns are position:sticky. On iOS, scrolling the PAGE vertically leaves
+   those sticky cells stale/blank until the user drags sideways. Promoting the
+   container and cells to compositing layers (translateZ(0)) makes WebKit
+   repaint them correctly while scrolling. */
+.table-scroll{
+  -webkit-overflow-scrolling:touch;
+  transform:translateZ(0);
+  will-change:scroll-position;
+  backface-visibility:hidden;
+}
+.table-scroll > table{
+  transform:translateZ(0);
+  backface-visibility:hidden;
+}
+.habit-cell,
+.goal-cell,
+.sum-label-cell,
+.sum-label-goal,
+.reading-table th.rname,
+.reading-table td.rname{
+  transform:translateZ(0);
+  -webkit-backface-visibility:hidden;
+  backface-visibility:hidden;
+  /* keep the solid background so repainted cells never show through */
+  background-color:var(--paper, #FFFEFB);
+}
+/* The sticky cells must sit above the day cells after promotion. */
+.habit-cell,.sum-label-cell{ z-index:3; }
+.goal-cell,.sum-label-goal{ z-index:2; }
+/* same treatment for the weekly table which has its own scroller */
+.wk-table{
+  -webkit-overflow-scrolling:touch;
+  transform:translateZ(0);
+  will-change:scroll-position;
+  backface-visibility:hidden;
+}
+.wk-table > table{ transform:translateZ(0); backface-visibility:hidden; }
+</style>
 
 <div id="quoteBox" dir="rtl">
   <div class="q-inner">
