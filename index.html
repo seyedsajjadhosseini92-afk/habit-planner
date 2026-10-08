@@ -532,10 +532,7 @@
     user-select: none;
   }
   input, textarea, select {
-    font-size: 16px; /* جلوگیری از زوم خودکار iOS روی فوکوس */
-    -webkit-appearance: none;
-    appearance: none;
-    border-radius: 10px;
+    font-size: 16px; /* جلوگیری از زوم خودکار iOS روی فوکاس */
   }
   input[type=number] {
     -moz-appearance: textfield;
@@ -656,6 +653,45 @@ html.compact .app-tabs .app-tab{ font-size:11.5px; padding:9px 8px; }
     font-size:16px !important;
   }
 }
+
+/* ---------- checkbox fix: native look + big tap target ---------- */
+input[type=checkbox]{
+  -webkit-appearance:checkbox !important;
+  appearance:auto !important;
+  width:24px !important;
+  height:24px !important;
+  min-width:24px !important;
+  min-height:24px !important;
+  flex:none !important;
+  accent-color:var(--accent);
+  cursor:pointer;
+  margin:2px;
+}
+/* the habit grid checkboxes keep their custom design but get bigger too */
+input.habitcheck{
+  -webkit-appearance:none !important;
+  appearance:none !important;
+  width:var(--chk-size) !important;
+  height:var(--chk-size) !important;
+  min-width:26px !important;
+  min-height:26px !important;
+}
+html.compact input[type=checkbox]{ width:22px !important; height:22px !important; min-width:22px !important; min-height:22px !important; }
+/* radios too (mood/sleep pickers) */
+input[type=radio]{
+  -webkit-appearance:radio !important;
+  appearance:auto !important;
+  width:24px !important;
+  height:24px !important;
+  accent-color:var(--accent);
+  cursor:pointer;
+}
+/* the custom-styled .habitcheck keeps none-appearance, but the small 20px
+   checkboxes in today-task / weekly / monthly rows now render natively and
+   are clearly visible on iOS. */
+.today-task-row input[type=checkbox],
+.wk-table input[type=checkbox],
+.mtable input[type=checkbox]{ width:24px !important; height:24px !important; }
 </style>
 </head>
 <body>
